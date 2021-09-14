@@ -13,6 +13,7 @@ resource "aws_s3_bucket" "bucket" {
 
   # Expiration of bucket objects
   lifecycle_rule {
+    id      = "object-expiration"
     enabled = var.object_expiration
 
     expiration {
@@ -27,6 +28,7 @@ resource "aws_s3_bucket" "bucket" {
 
   # Expiration of old versions of the objects
   lifecycle_rule {
+    id      = "version-expiration"
     enabled = var.version_expiration
 
     noncurrent_version_expiration {
