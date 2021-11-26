@@ -11,6 +11,31 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  # Expiration of bucket objects
+  lifecycle_rule {
+    id      = "object-expiration"
+    enabled = var.object_expiration
+
+    expiration {
+      days = var.object_expiration_days
+    }
+  }
+
+  # Enable versioning
+  versioning {
+    enabled = var.versioning
+  }
+
+  # Expiration of old versions of the objects
+  lifecycle_rule {
+    id      = "version-expiration"
+    enabled = var.version_expiration
+
+    noncurrent_version_expiration {
+      days = var.version_expiration_days
+    }
+  }
+
   # tags help with cost allocation
   tags = {
     Name  = local.prefixed_name
