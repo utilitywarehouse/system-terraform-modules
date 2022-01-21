@@ -66,8 +66,9 @@ output "mybucket" {
 }
 
 module "access_user" {
-  source       = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket_access?ref=X.X.X"
-  bucket_id    = module.mybucket.bucket.id
+  source        = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket_access?ref=X.X.X"
+  bucket_id     = module.mybucket.bucket.id
+  access_method = "iam_user"
 }
 
 output "user" {
@@ -91,9 +92,10 @@ output "mybucket" {
 }
 
 module "access_user" {
-  source       = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket_access?ref=X.X.X"
-  bucket_id    = module.mybucket.bucket.id
-  write_access = true
+  source        = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket_access?ref=X.X.X"
+  bucket_id     = module.mybucket.bucket.id
+  access_method = "iam_user"
+  write_access  = true
 }
 
 output "user" {
