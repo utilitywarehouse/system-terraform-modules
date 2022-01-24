@@ -12,27 +12,36 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   # Expiration of bucket objects
-  lifecycle_rule {
-    id      = "object-expiration"
-    enabled = var.object_expiration
+  dynamic "lifecycle_rule" {
+    for_each = var.object_expiration ? [1] : []
+    content {
+      id      = "object-expiration"
+      enabled = var.object_expiration
 
-    expiration {
-      days = var.object_expiration_days
+      expiration {
+        days = var.object_expiration_days
+      }
     }
   }
 
   # Enable versioning
-  versioning {
-    enabled = var.versioning
+  dynamic "versioning" {
+    for_each = var.versioning ? [1] : []
+    content {
+      enabled = var.versioning
+    }
   }
 
   # Expiration of old versions of the objects
-  lifecycle_rule {
-    id      = "version-expiration"
-    enabled = var.version_expiration
+  dynamic "lifecycle_rule" {
+    for_each = var.version_expiration ? [1] : []
+    content {
+      id      = "version-expiration"
+      enabled = var.version_expiration
 
-    noncurrent_version_expiration {
-      days = var.version_expiration_days
+      noncurrent_version_expiration {
+        days = var.version_expiration_days
+      }
     }
   }
 
