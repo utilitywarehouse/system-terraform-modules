@@ -2,6 +2,10 @@ variable "name" {
   description = "Descriptive name of the bucket, without any prefixes"
 }
 
+variable "name_is_legacy" {
+  description = "Bucket already exists with a legacy name format. Keep name as is"
+}
+
 variable "public" {
   description = "Should the bucket objects be publicly accesible?"
   type        = bool
@@ -40,5 +44,5 @@ variable "version_expiration_days" {
 
 locals {
   # bucket name that complies with UW's permission boundaries
-  prefixed_name = "uw-${local.caller_account_alias}-${local.caller_team}-${var.name}"
+  prefixed_name = var.name_is_legacy ? var.name : "uw-${local.caller_account_alias}-${local.caller_team}-${var.name}"
 }
