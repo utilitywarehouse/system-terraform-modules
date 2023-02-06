@@ -4,6 +4,8 @@ variable "name" {
 
 variable "name_is_legacy" {
   description = "Bucket already exists with a legacy name format. Keep name as is"
+  type        = bool
+  default     = false
 }
 
 variable "public" {
