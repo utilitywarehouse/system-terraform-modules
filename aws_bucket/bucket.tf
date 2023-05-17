@@ -8,9 +8,24 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
+# AWS disabled s3 buckets ACLs:
+# https://aws.amazon.com/about-aws/whats-new/2022/12/amazon-s3-automatically-enable-block-public-access-disable-access-control-lists-buckets-april-2023/
+# We need to enable this manually and se object ownership. See:
+# https://registry.terraform.io/modules/terraform-aws-modules/s3-bucket/aws/latest#private-bucket-with-versioning-enabled
+# https://github.com/terraform-aws-modules/terraform-aws-s3-bucket/issues/223#issuecomment-1545649581
+resource "aws_s3_bucket_ownership_controls" "bucket_ownership" {
+  bucket = aws_s3_bucket.bucket.id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 resource "aws_s3_bucket_acl" "acl" {
   bucket = aws_s3_bucket.bucket.id
   acl    = var.public ? "public-read" : "private"
+
+  depends_on = [aws_s3_bucket_ownership_controls.bucket_ownership]
 }
 
 # If bucket is private, block public access to comply with security audits
