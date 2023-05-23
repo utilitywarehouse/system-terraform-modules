@@ -84,6 +84,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
       }
     }
   }
+
+  # Default to Intelligent-Tiering
+  # https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html
+  rule {
+    id     = "default-to-intelligent-tiering"
+    status = "Enabled"
+    transition {
+      storage_class = "INTELLIGENT_TIERING"
+    }
+  }
 }
 
 output "bucket" {
