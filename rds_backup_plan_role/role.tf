@@ -129,3 +129,10 @@ resource "aws_iam_role_policy" "backup_policy_attachment" {
   role   = aws_iam_role.backup_role.name
   policy = data.aws_iam_policy_document.backup_policy.json
 }
+
+output "role" {
+  value = {
+    name = aws_iam_role.backup_role.name
+    arn  = aws_iam_role.backup_role.arn
+  }
+}
