@@ -11,7 +11,7 @@ Consult [iam.tf](iam.tf) and [postgres.tf](postgres.tf) to see what resources it
 ```terraform
 # Example for user with read and write permissions
 module "rw-user" {
-  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=f59eaabd6aefe0e27b9a7fa8d254eef7e05bf202"
+  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=029ffb430d29d6f900b6839ad4997e932d9069bb"
   name        = "rw-user"
   database    = postgresql_database.my_db.name
   privilege   = "read/write"
@@ -20,7 +20,7 @@ module "rw-user" {
 
 # Example for user with read-only permissions
 module "ro-user" {
-  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=f59eaabd6aefe0e27b9a7fa8d254eef7e05bf202"
+  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=029ffb430d29d6f900b6839ad4997e932d9069bb"
   name        = "ro-user"
   database    = postgresql_database.my_db.name
   privilege   = "read"
