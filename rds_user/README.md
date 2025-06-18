@@ -11,7 +11,7 @@ Consult [iam.tf](iam.tf) and [postgres.tf](postgres.tf) to see what resources it
 ```terraform
 # Example for user with read and write permissions
 module "rw-user" {
-  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=029ffb430d29d6f900b6839ad4997e932d9069bb"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=f975070ee79796f23db6a87c4403c27acf9b77e1"
   name        = "rw-user"
   database    = postgresql_database.my_db.name
   privilege   = "read/write"
@@ -20,7 +20,7 @@ module "rw-user" {
 
 # Example for user with read-only permissions
 module "ro-user" {
-  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=029ffb430d29d6f900b6839ad4997e932d9069bb"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=f975070ee79796f23db6a87c4403c27acf9b77e1"
   name        = "ro-user"
   database    = postgresql_database.my_db.name
   privilege   = "read"
@@ -29,7 +29,7 @@ module "ro-user" {
 
 # Example for using an already existing IAM role used for accessing an S3 bucket: 
 module "sample_db_existing_role" {
-  source      = "github.com/utilitywarehouse/system-terraform-modules//rds_user?ref=b07882f5fd16608af060ba589bf9f4db578a411a"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=b07882f5fd16608af060ba589bf9f4db578a411a"
   name        = "sample-db-existing-role"
   database    = postgresql_database.sample_db.name
   privilege   = "read/write"
