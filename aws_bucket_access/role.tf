@@ -5,9 +5,9 @@ data "aws_iam_policy_document" "vault_auth" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider",
-        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider-gcp",
-        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider-merit",
+        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider",
+        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider-gcp",
+        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider-merit",
       ]
     }
   }
@@ -17,7 +17,7 @@ resource "aws_iam_role" "role" {
   count                = var.access_method == "iam_role" ? 1 : 0
   name                 = "${var.team}-${local.bucket_name_without_prefixes}-bucket-${var.write_access ? "rw" : "ro"}"
   assume_role_policy   = var.iam_role_auth_policy != "" ? var.iam_role_auth_policy : data.aws_iam_policy_document.vault_auth.json
-  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/sys-${var.team}-boundary"
+  permissions_boundary = "arn:aws:iam::${local.caller_account_id}:policy/sys-${var.team}-boundary"
 }
 
 resource "aws_iam_role_policy" "role" {

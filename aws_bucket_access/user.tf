@@ -1,7 +1,7 @@
 resource "aws_iam_user" "user" {
   count                = var.access_method == "iam_user" ? 1 : 0
   name                 = "${var.team}-${local.bucket_name_without_prefixes}-bucket-${var.write_access ? "rw" : "ro"}"
-  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/sys-${var.team}-boundary"
+  permissions_boundary = "arn:aws:iam::${local.caller_account_id}:policy/sys-${var.team}-boundary"
 }
 
 resource "aws_iam_user_policy" "user" {

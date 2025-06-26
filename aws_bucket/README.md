@@ -15,7 +15,6 @@ This module creates an s3 bucket following UW's guidelines, which include:
 ```terraform
 module "mybucket" {
   source      = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
-  environment = "dev"
   team        = "finance"
   name        = "app-data"
 }
@@ -30,7 +29,6 @@ output "mybucket" {
 ```terraform
 module "mybucket" {
   source      = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
-  environment = "dev"
   team        = "finance"
   name        = "app-data"
   public      = true
@@ -46,7 +44,6 @@ output "mybucket" {
 ```terraform
 module "mybucket" {
   source                 = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
-  environment            = "dev"
   team                   = "finance"
   name                   = "app-data"
   object_expiration      = true
@@ -63,7 +60,6 @@ output "mybucket" {
 ```terraform
 module "mybucket" {
   source                  = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
-  environment             = "dev"
   team                    = "finance"
   name                    = "app-data"
   versioning              = true

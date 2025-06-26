@@ -6,11 +6,6 @@ variable "team" {
   description = "(required) Name of the team"
 }
 
-variable "environment" {
-  description = "(required) AWS environment name. e.g. dev, prod"
-  default     = "dev"
-}
-
 variable "public" {
   description = "Should the bucket objects be publicly accesible?"
   type        = bool
@@ -49,5 +44,5 @@ variable "version_expiration_days" {
 
 locals {
   # bucket name that complies with UW's permission boundaries
-  prefixed_name = "uw-${var.environment}-${var.team}-${var.name}"
+  prefixed_name = "uw-${local.caller_account_alias}-${var.team}-${var.name}"
 }

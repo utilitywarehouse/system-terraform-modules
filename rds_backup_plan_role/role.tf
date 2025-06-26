@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "backup_assume_role" {
 
 resource "aws_iam_role" "backup_role" {
   name                 = "${var.rds_name}-backup-role"
-  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/sys-${var.team}-boundary"
+  permissions_boundary = "arn:aws:iam::${local.caller_account_id}:policy/sys-${var.team}-boundary"
   assume_role_policy   = data.aws_iam_policy_document.backup_assume_role.json
 }
 

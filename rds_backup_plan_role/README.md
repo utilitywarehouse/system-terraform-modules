@@ -8,7 +8,6 @@ This module sets up the AWS IAM role to be used in the [backup plan](https://doc
 # declare the role
 module "rds_backup_plan_role" {
   source   = "github.com/utilitywarehouse/system-terraform-modules//rds_backup_plan_role?ref=d044000e7f1164abb48d984035e8dc8b43e13434"
-  account_id = var.account_id
   team       = local.team
   rds_name   = local.rds_name
 }
