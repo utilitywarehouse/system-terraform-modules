@@ -11,9 +11,9 @@ data "aws_iam_policy_document" "backup_assume_role" {
 }
 
 resource "aws_iam_role" "backup_role" {
-  name               = "${var.rds_name}-backup-role"
-  permissions_boundary = "arn:aws:iam::${local.caller_account_id}:policy/sys-${local.caller_team}-boundary"
-  assume_role_policy = data.aws_iam_policy_document.backup_assume_role.json
+  name                 = "${var.rds_name}-backup-role"
+  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/sys-${var.team}-boundary"
+  assume_role_policy   = data.aws_iam_policy_document.backup_assume_role.json
 }
 
 data "aws_iam_policy_document" "backup_policy" {
@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "backup_policy" {
       "rds:DeleteDBClusterAutomatedBackup"
     ]
     resources = [
-      "arn:aws:rds:*:*:*:${local.caller_team}-*",
+      "arn:aws:rds:*:*:*:${var.team}-*",
     ]
   }
 
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "backup_policy" {
       test     = "StringEquals"
       variable = "aws:RequestTag/owner"
       values = [
-        local.caller_team
+        var.team
       ]
     }
 
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "backup_policy" {
     ]
 
     resources = [
-      "arn:aws:backup:*:*:*:${local.caller_team}-*",
+      "arn:aws:backup:*:*:*:${var.team}-*",
     ]
   }
 

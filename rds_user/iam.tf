@@ -1,6 +1,6 @@
 locals {
   # arn looks like arn:aws:rds:eu-west-1:950135041896:db:dev-enablement-rds
-  region = split(":", var.db_instance.arn)[3]
+  region                = split(":", var.db_instance.arn)[3]
   default_iam_role_name = "${var.db_instance.identifier}-${var.name}"
 }
 
@@ -12,9 +12,9 @@ data "aws_iam_policy_document" "vault_auth" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider",
-        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider-gcp",
-        "arn:aws:iam::${local.caller_account_id}:user/sys-vault-credentials-provider-merit",
+        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider",
+        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider-gcp",
+        "arn:aws:iam::${var.account_id}:user/sys-vault-credentials-provider-merit",
       ]
     }
   }
@@ -22,10 +22,10 @@ data "aws_iam_policy_document" "vault_auth" {
 
 /*  do not create another role if an existing one was passed in. */
 resource "aws_iam_role" "iam_access_role" {
-  count = var.existing_iam_role == null ? 1 : 0
+  count                = var.existing_iam_role == null ? 1 : 0
   name                 = local.default_iam_role_name
   assume_role_policy   = data.aws_iam_policy_document.vault_auth.json
-  permissions_boundary = "arn:aws:iam::${local.caller_account_id}:policy/sys-${local.caller_team}-boundary"
+  permissions_boundary = "arn:aws:iam::${var.account_id}:policy/sys-${var.team}-boundary"
 }
 
 
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "rds_policy_doc" {
     ]
 
     resources = [
-      "arn:aws:rds-db:${local.region}:${local.caller_account_id}:dbuser:${var.db_instance.id}/${var.name}"
+      "arn:aws:rds-db:${local.region}:${var.account_id}:dbuser:${var.db_instance.id}/${var.name}"
     ]
   }
 }
