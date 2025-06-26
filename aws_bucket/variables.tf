@@ -1,5 +1,9 @@
 variable "name" {
-  description = "Descriptive name of the bucket, without any prefixes"
+  description = "(required) Descriptive name of the bucket, without any prefixes"
+}
+
+variable "team" {
+  description = "(required) Name of the team"
 }
 
 variable "public" {
@@ -40,5 +44,5 @@ variable "version_expiration_days" {
 
 locals {
   # bucket name that complies with UW's permission boundaries
-  prefixed_name = "uw-${local.caller_account_alias}-${local.caller_team}-${var.name}"
+  prefixed_name = "uw-${local.caller_account_alias}-${var.team}-${var.name}"
 }

@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "bucket" {
   # tags help with cost allocation
   tags = {
     Name  = local.prefixed_name
-    owner = local.caller_team
+    owner = var.team
   }
 }
 

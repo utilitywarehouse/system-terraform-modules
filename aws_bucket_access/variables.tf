@@ -1,3 +1,7 @@
+variable "team" {
+  description = "(required) Name of the team"
+}
+
 variable "bucket_id" {
   description = "Id of the bucket to be accessed"
 
@@ -33,5 +37,5 @@ variable "iam_role_auth_policy" {
 locals {
   bucket_name_without_uw       = trimprefix(var.bucket_id, "uw-")
   bucket_name_without_env      = trimprefix(local.bucket_name_without_uw, local.caller_account_alias)
-  bucket_name_without_prefixes = trimprefix(local.bucket_name_without_env, "-${local.caller_team}-")
+  bucket_name_without_prefixes = trimprefix(local.bucket_name_without_env, "-${var.team}-")
 }
