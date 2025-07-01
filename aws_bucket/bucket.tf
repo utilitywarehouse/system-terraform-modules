@@ -101,5 +101,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
 output "bucket" {
   value = {
     id = aws_s3_bucket.bucket.id
+    arn = aws_s3_bucket.bucket.arn
   }
 }
