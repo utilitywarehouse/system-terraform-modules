@@ -42,3 +42,12 @@ resource "postgresql_grant" "table_grant" {
   privileges  = var.privilege == "read" ? ["SELECT"] : ["DELETE", "INSERT", "REFERENCES", "SELECT", "TRIGGER", "TRUNCATE", "UPDATE"]
   depends_on  = [postgresql_role.pg_access_role]
 }
+
+resource "postgresql_grant" "sequence_grant" {
+  database    = var.database
+  role        = var.name
+  object_type = "sequence"
+  schema      = "public"
+  privileges  = var.privilege == "read" ? ["SELECT"] : ["SELECT", "USAGE"]
+  depends_on  = [postgresql_role.pg_access_role]
+}
