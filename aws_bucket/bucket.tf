@@ -90,7 +90,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
   # Default to Intelligent-Tiering
   # https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html
   dynamic "rule" {
-    for_each = var.version_expiration || var.object_expiration || var.use_intelligent_tiering ? [1] : []
+    for_each = var.use_intelligent_tiering ? [1] : []
     content {
       id     = "default-to-intelligent-tiering"
       status = "Enabled"

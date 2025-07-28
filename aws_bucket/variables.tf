@@ -43,9 +43,9 @@ variable "version_expiration_days" {
 }
 
 variable "use_intelligent_tiering" {
-  description = "Enable use of intelligent tiering even without object expiration"
+  description = "Enable use of intelligent tiering even without object or version expiration"
   type        = bool
-  default     = false
+  default     = true
 }
 
 locals {
