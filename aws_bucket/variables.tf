@@ -42,6 +42,12 @@ variable "version_expiration_days" {
   default     = 30
 }
 
+variable "use_intelligent_tiering" {
+  description = "Enable use of intelligent tiering even without object expiration"
+  type        = bool
+  default     = false
+}
+
 locals {
   # bucket name that complies with UW's permission boundaries
   prefixed_name = "uw-${local.caller_account_alias}-${var.team}-${var.name}"
