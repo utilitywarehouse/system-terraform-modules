@@ -58,7 +58,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
-  count  = var.version_expiration || var.object_expiration ? 1 : 0
+  count  = var.version_expiration || var.object_expiration || var.use_intelligent_tiering ? 1 : 0
   bucket = aws_s3_bucket.bucket.id
 
   # Expiration of bucket objects
@@ -89,11 +89,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
 
   # Default to Intelligent-Tiering
   # https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering-overview.html
-  rule {
-    id     = "default-to-intelligent-tiering"
-    status = "Enabled"
-    transition {
-      storage_class = "INTELLIGENT_TIERING"
+  dynamic "rule" {
+    for_each = var.use_intelligent_tiering ? [1] : []
+    content {
+      id     = "default-to-intelligent-tiering"
+      status = "Enabled"
+      transition {
+        storage_class = "INTELLIGENT_TIERING"
+      }
     }
   }
 }
