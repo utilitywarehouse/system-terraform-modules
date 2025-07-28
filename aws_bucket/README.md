@@ -7,6 +7,7 @@ This module creates an s3 bucket following UW's guidelines, which include:
 - encryption at rest
 - tags for cost allocation
 - support for versioning and expiration
+- uses [Intelligent Tiering](https://aws.amazon.com/s3/storage-classes/intelligent-tiering/) by default 
 
 # Usage
 
@@ -55,15 +56,14 @@ output "mybucket" {
 }
 ```
 
-## Bucket without expiration and only intelligent tiering enabled
+## Bucket without intelligent tiering
 
 ```terraform
 module "mybucket" {
   source                  = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
   team                    = "finance"
   name                    = "app-data"
-  object_expiration       = false
-  use_intelligent_tiering = true
+  use_intelligent_tiering = false
 }
 
 output "mybucket" {
