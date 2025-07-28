@@ -55,6 +55,22 @@ output "mybucket" {
 }
 ```
 
+## Bucket without expiration and only intelligent tiering enabled
+
+```terraform
+module "mybucket" {
+  source                  = "github.com/utilitywarehouse/system-terraform-modules//aws_bucket?ref=X.X.X"
+  team                    = "finance"
+  name                    = "app-data"
+  object_expiration       = false
+  use_intelligent_tiering = true
+}
+
+output "mybucket" {
+  value = module.mybucket.bucket
+}
+```
+
 ## Bucket with versioning enabled and expiration for the versions
 
 ```terraform
