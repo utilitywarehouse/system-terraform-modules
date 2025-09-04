@@ -67,7 +67,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
     content {
       id     = "object-expiration"
       status = "Enabled"
-
+      filter {}
       expiration {
         days = var.object_expiration_days
       }
@@ -80,7 +80,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
     content {
       id     = "version-expiration"
       status = "Enabled"
-
+      filter {}
       noncurrent_version_expiration {
         noncurrent_days = var.version_expiration_days
       }
@@ -94,7 +94,9 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
     content {
       id     = "default-to-intelligent-tiering"
       status = "Enabled"
+      filter {}
       transition {
+        days          = 0
         storage_class = "INTELLIGENT_TIERING"
       }
     }
