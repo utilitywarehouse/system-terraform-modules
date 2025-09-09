@@ -31,7 +31,7 @@ module "ro-user" {
 
 # Example for user with no permissions and then defining custom grants
 module "custom-grants-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=5aaa8d1dba8b45023ef6e576db298fb3d5e7bdd9"
   team        = "finance"
   name        = "custom-grants"
   database    = postgresql_database.my_db.name
@@ -40,12 +40,11 @@ module "custom-grants-user" {
 }
 
 resource "postgresql_grant" "db_grant" {
-  count       = var.privilege == "none" ? 0 : 1
   database    = postgresql_database.my_db.name
   role        = "custom-grants"
   object_type = "database"
   privileges  = ["CONNECT", "CREATE"]
-  depends_on  = module.custom-grants-user.postgresql_role
+  depends_on  = [module.custom-grants-user.postgresql_role]
 }
 
 
