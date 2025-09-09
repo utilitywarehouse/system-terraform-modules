@@ -17,7 +17,15 @@ resource "postgresql_role" "pg_access_role" {
   roles = ["rds_iam"]
 }
 
+output "postgresql_role" {
+  description = "The postgresql_role resource created"
+  value       = postgresql_role.pg_access_role
+}
+
+# grants are included when the privilege variable is different than "none"
+
 resource "postgresql_grant" "db_grant" {
+  count       = var.privilege == "none" ? 0 : 1
   database    = var.database
   role        = var.name
   object_type = "database"
@@ -26,6 +34,7 @@ resource "postgresql_grant" "db_grant" {
 }
 
 resource "postgresql_grant" "schema_grant" {
+  count       = var.privilege == "none" ? 0 : 1
   database    = var.database
   role        = var.name
   object_type = "schema"
@@ -35,6 +44,7 @@ resource "postgresql_grant" "schema_grant" {
 }
 
 resource "postgresql_grant" "table_grant" {
+  count       = var.privilege == "none" ? 0 : 1
   database    = var.database
   role        = var.name
   object_type = "table"
@@ -44,6 +54,7 @@ resource "postgresql_grant" "table_grant" {
 }
 
 resource "postgresql_grant" "sequence_grant" {
+  count       = var.privilege == "none" ? 0 : 1
   database    = var.database
   role        = var.name
   object_type = "sequence"
