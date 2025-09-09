@@ -20,8 +20,8 @@ variable "existing_iam_role" {
 variable "privilege" {
   description = "Type of privilege to grant user on the specified database"
   validation {
-    condition     = contains(["read", "read/write"], var.privilege)
-    error_message = "Privilege must be \"read\" or \"read/write\""
+    condition     = contains(["read", "read/write", "none"], var.privilege)
+    error_message = "Privilege must be one of 'read','read/write' or 'none'"
   }
   default = "read"
 }

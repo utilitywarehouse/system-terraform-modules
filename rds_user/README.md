@@ -29,6 +29,26 @@ module "ro-user" {
   db_instance = aws_db_instance.postgres
 }
 
+# Example for user with no permissions and then defining custom grants
+module "custom-grants-user" {
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
+  team        = "finance"
+  name        = "custom-grants"
+  database    = postgresql_database.my_db.name
+  privilege   = "none"
+  db_instance = aws_db_instance.postgres
+}
+
+resource "postgresql_grant" "db_grant" {
+  count       = var.privilege == "none" ? 0 : 1
+  database    = postgresql_database.my_db.name
+  role        = "custom-grants"
+  object_type = "database"
+  privileges  = ["CONNECT", "CREATE"]
+  depends_on  = module.custom-grants-user.postgresql_role
+}
+
+
 # Example for using an already existing IAM role used for accessing an S3 bucket:
 module "sample_db_existing_role" {
   source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
