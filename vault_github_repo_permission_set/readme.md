@@ -10,22 +10,34 @@ Token will have `write` access to `contents and pull_requests` in `my_repo and o
 ```hcl
 module "my_repo" {
   source                = "git@github.com:utilitywarehouse/system-terraform-modules//vault_github_repo_permission_set?ref=main"
+  
+  # The ID of the Github app installation in the org
   github_app_install_id = var.github_app_install_id
 
+  # The name of org and repository from which workflows will be requesting this
+  # access token
   org        = "my_org"
   repository = "my_repo"
 
+  # A list of the names of the repositories within the organisation that the 
+  # access token should have access to.
   target_repositories = [
     "my_repo",
     "other-repo",
   ]
 
+  # A key value map of permission names to their access type (read or write). 
+  # See GitHub’s documentation on permission names and access types.
+  # https://developer.github.com/v3/apps/permissions
+  #	https://docs.github.com/en/rest/apps/apps#create-an-installation-access-token-for-an-app
   permissions = {
     contents      = "write"
     metadata      = "read"
     pull_requests = "write"
   }
 
+  # This module creates role and adds a policy for above permissions but if additional
+  # policy access is required then it can be added here 
   additional_token_policies = [
     vault_policy.shared_repos_ro.name
   ]
@@ -39,6 +51,7 @@ output "my_repo_secret_path" {
 }
 ```
 
+`terraform plan` produces this output
 
 ```hcl
  # module.my_repo.vault_generic_endpoint.repo_permission_set will be created
