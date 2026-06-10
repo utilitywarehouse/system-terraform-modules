@@ -15,16 +15,17 @@ Consult [iam.tf](iam.tf) and [postgres.tf](postgres.tf) to see what resources it
 Error: putting IAM Role (leads-platform-rds-lead_sharing) Policy (leads-platform-rds-lead_sharing): operation error IAM: PutRolePolicy, https response error StatusCode: 403, RequestID: xxxxxxxxxxxxxxxxxx, api error AccessDenied: User: arn:aws:sts::xxxxxxxxx:assumed-role/leads-platform-admin/aws-go-sdk-xxxxxxxxxxx is not authorized to perform: iam:PutRolePolicy on resource: role leads-platform-rds-lead_sharing because no permissions boundary allows the iam:PutRolePolicy action
 ```
 
-**Reason**: seems there is some race condition when creating a new user role. We'll investigate further. Watch [this ticket](https://trello.com/c/kduQGEiR/3242-rds-user-race-condition-on-role-creation) for updates.
+**Reason**: [the role and its role policy](https://github.com/utilitywarehouse/system-terraform-modules/blob/4b8963f1d30253e65ddd6f39927d7b75988886d7/rds_user/iam.tf#L24-L36) creation was launched in parallel, as there was no implicit or explicit dependency between them. And so the role policy often didn't find the role to be attached to.
 
-**Workaround**: retry the apply. It was reported that it can take even several minutes until it works.
+**Fix**: use at least revision [64078164e7578614c4d5506ac9601a8cf81dbf58](https://github.com/utilitywarehouse/system-terraform-modules/commit/64078164e7578614c4d5506ac9601a8cf81dbf58) of the module where an implicit dependency was implemented.
 
+**Workaround**: retry the apply. The role will be eventually created and the policy will find it.
 ## Usage example:
 
 ```terraform
 # Example for user with read and write permissions
 module "rw-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
   team        = "finance"
   name        = "rw-user"
   database    = postgresql_database.my_db.name
@@ -34,7 +35,7 @@ module "rw-user" {
 
 # Example for user with read-only permissions
 module "ro-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
   team        = "finance"
   name        = "ro-user"
   database    = postgresql_database.my_db.name
@@ -44,7 +45,7 @@ module "ro-user" {
 
 # Example for user with no permissions and then defining custom grants
 module "custom-grants-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=5aaa8d1dba8b45023ef6e576db298fb3d5e7bdd9"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
   team        = "finance"
   name        = "custom-grants"
   database    = postgresql_database.my_db.name
@@ -63,7 +64,7 @@ resource "postgresql_grant" "db_grant" {
 
 # Example for using an already existing IAM role used for accessing an S3 bucket:
 module "sample_db_existing_role" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=1c1b91c66e166404f305a26aca2f8236fd47ee99"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
   team        = "finance"
   name        = "sample-db-existing-role"
   database    = postgresql_database.sample_db.name
