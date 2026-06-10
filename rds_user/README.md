@@ -6,6 +6,19 @@ See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAut
 
 Consult [iam.tf](iam.tf) and [postgres.tf](postgres.tf) to see what resources it defines and [variables.tf](variables.tf) for available input variables.
 
+## Known issues
+
+### Apply fails with AccessDenied
+
+**Example failure**:
+```
+Error: putting IAM Role (leads-platform-rds-lead_sharing) Policy (leads-platform-rds-lead_sharing): operation error IAM: PutRolePolicy, https response error StatusCode: 403, RequestID: xxxxxxxxxxxxxxxxxx, api error AccessDenied: User: arn:aws:sts::xxxxxxxxx:assumed-role/leads-platform-admin/aws-go-sdk-xxxxxxxxxxx is not authorized to perform: iam:PutRolePolicy on resource: role leads-platform-rds-lead_sharing because no permissions boundary allows the iam:PutRolePolicy action
+```
+
+**Reason**: seems there is some race condition when creating a new user role. We'll investigate further. Watch [this ticket](https://trello.com/c/kduQGEiR/3242-rds-user-race-condition-on-role-creation) for updates.
+
+**Workaround**: retry the apply. It was reported that it can take even several minutes until it works.
+
 ## Usage example:
 
 ```terraform
