@@ -31,7 +31,7 @@ resource "aws_iam_role" "iam_access_role" {
 
 resource "aws_iam_role_policy" "access_role_policy" {
   name   = "${var.db_instance.identifier}-${var.name}"
-  role   = var.existing_iam_role == null ? local.default_iam_role_name : var.existing_iam_role
+  role   = var.existing_iam_role == null ? aws_iam_role.iam_access_role[0].id : var.existing_iam_role
   policy = data.aws_iam_policy_document.rds_policy_doc.json
 }
 
