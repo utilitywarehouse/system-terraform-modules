@@ -72,4 +72,15 @@ module "sample_db_existing_role" {
   db_instance = aws_db_instance.postgres
   existing_iam_role = "dev-enablement-test-backups-bucket-rw"
 }
+
+# Example for granting the user additional postgres roles (e.g. rds_superuser)
+module "sample_db_extra_roles" {
+  source         = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  team           = "finance"
+  name           = "sample-db-extra-roles"
+  database       = postgresql_database.sample_db.name
+  privilege      = "read/write"
+  db_instance    = aws_db_instance.postgres
+  extra_pg_roles = ["pg_monitor"]
+}
 ```
