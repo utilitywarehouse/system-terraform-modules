@@ -14,7 +14,7 @@ resource "postgresql_role" "pg_access_role" {
   password = "NULL"
   # Allows access for this role through IAM authentication.
   # See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.DBAccounts.html
-  roles = ["rds_iam"]
+  roles = concat(["rds_iam"], var.extra_pg_roles)
 }
 
 output "postgresql_role" {

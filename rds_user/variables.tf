@@ -26,6 +26,12 @@ variable "privilege" {
   default = "read"
 }
 
+variable "extra_pg_roles" {
+  type        = list(string)
+  description = "Additional postgres roles to grant to the user"
+  default     = []
+}
+
 variable "db_instance" {
   description = "The aws_db_instance for which the user is defined"
   type = object({
