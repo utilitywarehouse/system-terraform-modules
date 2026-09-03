@@ -25,7 +25,7 @@ Error: putting IAM Role (leads-platform-rds-lead_sharing) Policy (leads-platform
 ```terraform
 # Example for user with read and write permissions
 module "rw-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=34f6a55277dbe211ef3a33123a12842288e23313"
   team        = "finance"
   name        = "rw-user"
   database    = postgresql_database.my_db.name
@@ -35,7 +35,7 @@ module "rw-user" {
 
 # Example for user with read-only permissions
 module "ro-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=34f6a55277dbe211ef3a33123a12842288e23313"
   team        = "finance"
   name        = "ro-user"
   database    = postgresql_database.my_db.name
@@ -45,7 +45,7 @@ module "ro-user" {
 
 # Example for user with no permissions and then defining custom grants
 module "custom-grants-user" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=34f6a55277dbe211ef3a33123a12842288e23313"
   team        = "finance"
   name        = "custom-grants"
   database    = postgresql_database.my_db.name
@@ -64,7 +64,7 @@ resource "postgresql_grant" "db_grant" {
 
 # Example for using an already existing IAM role used for accessing an S3 bucket:
 module "sample_db_existing_role" {
-  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  source      = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=34f6a55277dbe211ef3a33123a12842288e23313"
   team        = "finance"
   name        = "sample-db-existing-role"
   database    = postgresql_database.sample_db.name
@@ -75,7 +75,7 @@ module "sample_db_existing_role" {
 
 # Example for granting the user additional postgres roles (e.g. rds_superuser)
 module "sample_db_extra_roles" {
-  source         = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=64078164e7578614c4d5506ac9601a8cf81dbf58"
+  source         = "git@github.com:utilitywarehouse/system-terraform-modules//rds_user?ref=34f6a55277dbe211ef3a33123a12842288e23313"
   team           = "finance"
   name           = "sample-db-extra-roles"
   database       = postgresql_database.sample_db.name
