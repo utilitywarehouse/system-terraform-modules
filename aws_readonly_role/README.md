@@ -4,11 +4,18 @@ This module creates the role a person or an agent assumes to look around an AWS
 account without being able to change anything in it.
 
 It attaches the AWS managed `ReadOnlyAccess` policy, which covers the control
-plane of every service but reads data as well: object bodies from every bucket,
-values from every SSM parameter and items from every DynamoDB table. An inline
-policy denies those reads, keeping object reads for the `uw-terraform` buckets
-that hold terraform state, so the role answers "what is deployed and how is it
-configured" without returning secrets or customer data.
+plane of every service but reads data as well: object bodies from every bucket
+(terraform state included), parameter and secret values, DynamoDB items, queue and
+stream payloads, container images, instance user data, and knowledge-base
+content. An inline policy denies those reads, so the role answers "what is
+deployed and how is it configured" without returning stored secrets or object,
+row and message data.
+
+CloudWatch Logs, metrics, traces and CloudTrail are left readable: without them
+the role cannot answer "why is this broken". Log bodies are not filtered, so
+anything written to a log stays readable through this role. `ReadOnlyAccess` is
+a deny-nobody policy and gains data actions over time, so review the inline
+policy when the AWS managed policy is next revised.
 
 No permissions boundary is attached, because the `sys-<team>-boundary` in each
 account allows only a small part of what `ReadOnlyAccess` allows, and the

@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "auth" {
 
 resource "aws_iam_role" "role" {
   name        = var.role_name
-  description = "Read-only access to every service, without object bodies, parameter values or secret values"
+  description = "Read-only access to every service, without stored data: object bodies, parameter and secret values, table items, queue and stream payloads, images and instance user data"
 
   assume_role_policy = data.aws_iam_policy_document.auth.json
 }
